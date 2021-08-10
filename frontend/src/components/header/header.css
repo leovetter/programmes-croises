@@ -1,0 +1,18 @@
+.head {
+    padding-top: 24px;
+    padding-bottom: 20px;
+    width: 130px;
+    padding-left: 25px;
+    background-color: #36304a;
+    color: white;
+    text-transform: uppercase;
+    line-height: 1.4;
+    font-family: Montserrat-Medium;
+    font-size: 12px;
+    padding-right: 10px;
+    cursor: pointer;
+}
+
+.head-over {
+    background-color: #484848;
+}

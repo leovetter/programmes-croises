@@ -1,0 +1,18 @@
+
+@font-face {
+    font-family: Montserrat-Regular;
+    src: url('../../fonts/montserrat/Montserrat-Regular.ttf'); 
+}
+  
+@font-face {
+    font-family: Montserrat-Medium;
+    src: url('../../fonts/montserrat/Montserrat-Medium.ttf'); 
+}
+
+table {
+    width: calc(100% - 10rem);
+    background-color: #fff;
+    border-spacing: 0;
+    margin: 5rem 5rem;
+    border-collapse: collapse;
+}
