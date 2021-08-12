@@ -3,6 +3,7 @@ import FirstCell from '../first-cell/FirstCell';
 import Cell from '../cell/Cell';
 import React from 'react';
 import './table.css';
+import ProgrammesService from '../../services/programmes.service';
 
 class Table extends React.Component {
 
@@ -11,19 +12,48 @@ class Table extends React.Component {
         this.state = {
             columns: Array(10).fill(null),
             rows: Array(7).fill(null),
-            cells: Array(9*7).fill(null)
+            cells: Array(9*7).fill(null),
+            themes: [],
+            partis: []
         };
     }
 
-    componentDidMount() {
+    componentDidMount( ) {
+        
+        const programmesService = new ProgrammesService();
 
-        fetch("http://localhost:9000/programmes")
-            .then(res => res.json())
-            .then(programmes => {
+        programmesService.themes$.subscribe(themes => {
 
-                console.log(programmes)
-            })
+            this.setState({
+                themes
+            });
+        })
 
+        programmesService.partis$.subscribe(partis => {
+
+            console.log(partis)
+            this.setState({
+                partis
+            });
+        })
+    }
+    
+    renderHeaders() {
+
+        const headers = [
+            <Header isColumOver={this.state.columns[1]} column={1} name={''}></Header>
+        ]
+        for(let i = 0; i < this.state.themes.length; i++) {
+
+            headers.push(<Header isColumOver={this.state.columns[i+2]} column={i+2} name={this.state.themes[i]}></Header>)
+        };
+
+        return headers;
+    }
+
+    renderFirstCell(rowIndex) {
+
+        return <FirstCell parti={this.state.partis[rowIndex-1]} isCellOver={ this.state.cells[10*rowIndex*1] }isRowOver={ this.state.rows[rowIndex] } isColumOver={this.state.columns[1]} column={1} onMouseOver={() => this.handleMouseOver(1, rowIndex)} onMouseOut={ () => this.handleMouseOut(1, rowIndex)}></FirstCell>;
     }
 
     render() {
@@ -32,21 +62,14 @@ class Table extends React.Component {
             <table>
                 <thead>
                     <tr>
-                        <Header isColumOver={this.state.columns[1]} column={1} name={''}></Header>
-                        <Header isColumOver={this.state.columns[2]} column={2} name={'Europe'}></Header>
-                        <Header isColumOver={this.state.columns[3]} column={3} name={'Travail'}></Header>
-                        <Header isColumOver={this.state.columns[4]} column={4} name={'Justice'}></Header>
-                        <Header isColumOver={this.state.columns[5]} column={5} name={'Territoire'}></Header>
-                        <Header isColumOver={this.state.columns[6]} column={6} name={'Immigration'}></Header>
-                        <Header isColumOver={this.state.columns[7]} column={7} name={'Economie'}></Header>
-                        <Header isColumOver={this.state.columns[8]} column={8} name={'Fiscalité'}></Header>
-                        <Header isColumOver={this.state.columns[9]} column={9} name={'Feminisme'}></Header>
-                        <Header isColumOver={this.state.columns[10]} column={10} name={'LGBT'}></Header>
+                        { 
+                            this.renderHeaders()
+                        }
                     </tr>
                 </thead>
                  <tbody>
                     <tr>
-                        <FirstCell isCellOver={ this.state.cells[1*1] }isRowOver={ this.state.rows[1] } isColumOver={this.state.columns[1]} column={1} onMouseOver={() => this.handleMouseOver(1, 1)} onMouseOut={ () => this.handleMouseOut(1, 1)}></FirstCell>
+                        { this.renderFirstCell(1) }
                         <Cell isCellOver={ this.state.cells[1*2] }isRowOver={ this.state.rows[1] } isColumOver={this.state.columns[2]} column={2} onMouseOver={() => this.handleMouseOver(2, 1)} onMouseOut={ () => this.handleMouseOut(2, 1)}></Cell>
                         <Cell isCellOver={ this.state.cells[1*3] }isRowOver={ this.state.rows[1] } isColumOver={this.state.columns[3]} column={3} onMouseOver={() => this.handleMouseOver(3, 1)} onMouseOut={ () => this.handleMouseOut(3, 1)}></Cell>
                         <Cell isCellOver={ this.state.cells[1*4] }isRowOver={ this.state.rows[1] } isColumOver={this.state.columns[4]} column={4} onMouseOver={() => this.handleMouseOver(4, 1)} onMouseOut={ () => this.handleMouseOut(4, 1)}></Cell>
@@ -58,7 +81,7 @@ class Table extends React.Component {
                         <Cell isCellOver={ this.state.cells[1*10] }isRowOver={ this.state.rows[1] } isColumOver={this.state.columns[10]} column={10} onMouseOver={() => this.handleMouseOver(10, 1)} onMouseOut={ () => this.handleMouseOut(10, 1)}></Cell>
                     </tr>
                     <tr>
-                        <FirstCell isCellOver={ this.state.cells[10*1 + 1] }isRowOver={ this.state.rows[2] } isColumOver={this.state.columns[1]} column={1} onMouseOver={() => this.handleMouseOver(1, 2)} onMouseOut={ () => this.handleMouseOut(1, 2)}></FirstCell>
+                        { this.renderFirstCell(2) }
                         <Cell isCellOver={ this.state.cells[10*1 + 2] }isRowOver={ this.state.rows[2] } isColumOver={this.state.columns[2]} column={2} onMouseOver={() => this.handleMouseOver(2, 2)} onMouseOut={ () => this.handleMouseOut(2, 2)}></Cell>
                         <Cell isCellOver={ this.state.cells[10*1 + 3] }isRowOver={ this.state.rows[2] } isColumOver={this.state.columns[3]} column={3} onMouseOver={() => this.handleMouseOver(3, 2)} onMouseOut={ () => this.handleMouseOut(3, 2)}></Cell>
                         <Cell isCellOver={ this.state.cells[10*1 + 4] }isRowOver={ this.state.rows[2] } isColumOver={this.state.columns[4]} column={4} onMouseOver={() => this.handleMouseOver(4, 2)} onMouseOut={ () => this.handleMouseOut(4, 2)}></Cell>
@@ -70,7 +93,7 @@ class Table extends React.Component {
                         <Cell isCellOver={ this.state.cells[10*1 + 10] }isRowOver={ this.state.rows[2] } isColumOver={this.state.columns[10]} column={10} onMouseOver={() => this.handleMouseOver(10, 2)} onMouseOut={ () => this.handleMouseOut(10, 2)}></Cell>
                     </tr>
                     <tr>
-                        <FirstCell isCellOver={ this.state.cells[10*2 + 1] }isRowOver={ this.state.rows[3] } isColumOver={this.state.columns[1]} column={1} onMouseOver={() => this.handleMouseOver(1, 3)} onMouseOut={ () => this.handleMouseOut(1, 3)}></FirstCell>
+                        { this.renderFirstCell(3) }
                         <Cell isCellOver={ this.state.cells[10*2 + 2] }isRowOver={ this.state.rows[3] } isColumOver={this.state.columns[2]} column={2} onMouseOver={() => this.handleMouseOver(2, 3)} onMouseOut={ () => this.handleMouseOut(2, 3)}></Cell>
                         <Cell isCellOver={ this.state.cells[10*2 + 3] }isRowOver={ this.state.rows[3] } isColumOver={this.state.columns[3]} column={3} onMouseOver={() => this.handleMouseOver(3, 3)} onMouseOut={ () => this.handleMouseOut(3, 3)}></Cell>
                         <Cell isCellOver={ this.state.cells[10*2 + 4] }isRowOver={ this.state.rows[3] } isColumOver={this.state.columns[4]} column={4} onMouseOver={() => this.handleMouseOver(4, 3)} onMouseOut={ () => this.handleMouseOut(4, 3)}></Cell>
@@ -82,7 +105,7 @@ class Table extends React.Component {
                         <Cell isCellOver={ this.state.cells[10*2 + 10] }isRowOver={ this.state.rows[3] } isColumOver={this.state.columns[10]} column={10} onMouseOver={() => this.handleMouseOver(10, 3)} onMouseOut={ () => this.handleMouseOut(10, 3)}></Cell>
                     </tr>
                     <tr>
-                        <FirstCell isCellOver={ this.state.cells[10*3 + 1] }isRowOver={ this.state.rows[4] } isColumOver={this.state.columns[1]} column={1} onMouseOver={() => this.handleMouseOver(1, 4)} onMouseOut={ () => this.handleMouseOut(1, 4)}></FirstCell>
+                        { this.renderFirstCell(4) }
                         <Cell isCellOver={ this.state.cells[10*3 + 2] }isRowOver={ this.state.rows[4] } isColumOver={this.state.columns[2]} column={2} onMouseOver={() => this.handleMouseOver(2, 4)} onMouseOut={ () => this.handleMouseOut(2, 4)}></Cell>
                         <Cell isCellOver={ this.state.cells[10*3 + 3] }isRowOver={ this.state.rows[4] } isColumOver={this.state.columns[3]} column={3} onMouseOver={() => this.handleMouseOver(3, 4)} onMouseOut={ () => this.handleMouseOut(3, 4)}></Cell>
                         <Cell isCellOver={ this.state.cells[10*3 + 4] }isRowOver={ this.state.rows[4] } isColumOver={this.state.columns[4]} column={4} onMouseOver={() => this.handleMouseOver(4, 4)} onMouseOut={ () => this.handleMouseOut(4, 4)}></Cell>
