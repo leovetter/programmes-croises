@@ -5,6 +5,7 @@ class Header extends React.Component {
 
     constructor(props) {
         super(props);
+        
         this.state = {
             isOver: false
         };
@@ -13,9 +14,12 @@ class Header extends React.Component {
     render() {
 
         return (
-            <th className={`head column${this.props.column} ${this.props.isColumOver ? 'head-over' : ''} ${this.state.isOver ? 'head-over' : ''}`}
+            <th className={`head column${this.props.column} 
+                                        ${this.props.isColumOver ? 'head-over' : ''} 
+                                        ${this.state.isOver ? 'head-over' : ''}
+                                        ${!this.props.isVisible ? 'head-min' : ''}`}
                 onMouseOver={ () => this.setState({ isOver: true })}
-                onMouseOut={ () => this.setState({ isOver: false })}>{ this.props.name }</th>
+                onMouseOut={ () => this.setState({ isOver: false })}><span>{ this.props.name }</span></th>
         )
     }
 }
